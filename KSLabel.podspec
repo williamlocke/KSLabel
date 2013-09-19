@@ -15,9 +15,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '5.0'
   
-  cs.source_files =  'KSLabel/*.[h,m]'
-    
-  end
+  s.source_files =  'KSLabel/*.[h,m]'
   
   
   s.frameworks = 'QuartzCore'
