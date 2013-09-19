@@ -39,7 +39,15 @@
 	
 	if (self) {
 		self.backgroundColor = [UIColor clearColor];
-	}
+        
+        self.outlineWidth = 4;
+        
+        self.dropShadowColor = [UIColor blackColor];
+        self.dropShadowOffset = CGSizeMake(4.0, 4.0);
+        self.dropShadowOpacity = 1.0;
+        self.dropShadowRadius = 1.0;
+        
+    }
     
     return self;
 }
@@ -60,6 +68,34 @@
 	[super drawTextInRect:rect];
 	
 	CGImageRef alphaMask = NULL;
+    
+    
+    
+    
+    
+    
+    
+//    CGSize myShadowOffset = CGSizeMake(4, -4);
+//    float myColorValues[] = {0, 0, 0, .8};
+//    
+//    CGContextRef myContext = UIGraphicsGetCurrentContext();
+//    CGContextSaveGState(myContext);
+//    
+//    CGColorSpaceRef myColorSpace = CGColorSpaceCreateDeviceRGB();
+//    CGColorRef myColor = CGColorCreate(myColorSpace, myColorValues);
+//    CGContextSetShadowWithColor (myContext, myShadowOffset, 5, myColor);
+//    [super drawTextInRect:rect];
+//    CGColorRelease(myColor);
+//    CGColorSpaceRelease(myColorSpace);
+//    CGContextRestoreGState(myContext);
+    
+    
+//    self.layer.shadowColor = [[UIColor blackColor] CGColor];
+//    self.layer.shadowOffset = CGSizeMake(4.0f, 0.0f);
+//    self.layer.shadowOpacity = 1.0f;
+//    self.layer.shadowRadius = 1.0f;
+    
+    
 	
 	if ([self drawGradient]) {
 		// Create a mask from the text
@@ -94,13 +130,23 @@
 	}
 	
 	if ([self drawOutline]) {
+        
+//        // We take the radius times two to have the same result as settings the CALayers shadow radius.
+//        // CALayer seems to take a true radius where CGContext seems to take amount of pixels (so 2 would
+//        // be one pixel in each direction or something like that).
+//        CGSize shadowOffset = CGSizeMake(10, 10);
+//        float shadowBlur = 1;
+//        UIColor *shadowColor = [UIColor greenColor];
+//        CGContextSetShadowWithColor(context, shadowOffset, shadowBlur * 2.0f, [shadowColor CGColor]);
+        
 		// Create a mask from the text (with the gradient)
 		alphaMask = CGBitmapContextCreateImage(context);
 		
 		// Outline width
-		CGContextSetLineWidth(context, 4);
+		CGContextSetLineWidth(context, self.outlineWidth);
 		CGContextSetLineJoin(context, kCGLineJoinRound);
-		
+        
+        
 		// Set the drawing method to stroke
 		CGContextSetTextDrawingMode(context, kCGTextStroke);
 		
@@ -115,13 +161,24 @@
 		// and invert everything because CoreGraphics works with an inverted coordinate system
 		CGContextTranslateCTM(context, 0, rect.size.height);
 		CGContextScaleCTM(context, 1.0, -1.0);
+        
 		CGContextDrawImage(context, rect, alphaMask);
-		
 		// Clean up because ARC doesnt handle CG
 		CGImageRelease(alphaMask);
 		
 		// restore the original color
 		self.textColor = tmpColor;
 	}
+    
+    
+    if(self.drawDropShadow){
+        self.layer.shadowColor = [self.dropShadowColor CGColor];
+        self.layer.shadowOffset = self.dropShadowOffset;
+        self.layer.shadowOpacity = self.dropShadowOpacity;
+        self.layer.shadowRadius = self.dropShadowRadius;
+    }
+
+
+    
 }
 @end

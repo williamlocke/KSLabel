@@ -31,14 +31,24 @@
 //	3) or a tweet mentioning @modogo
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface KSLabel : UILabel {
 	CGFloat gradientColors[8];
 }
+
+@property float outlineWidth;
 
 @property BOOL drawOutline;
 @property (strong, nonatomic) UIColor *outlineColor;
 
 @property BOOL drawGradient;
 -(void) setGradientColors: (CGFloat [8]) colors;
+
+@property BOOL drawDropShadow;
+@property CGSize dropShadowOffset;
+@property UIColor *dropShadowColor;
+@property float dropShadowOpacity;
+@property float dropShadowRadius;
+
 @end
